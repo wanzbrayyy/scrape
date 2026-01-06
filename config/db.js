@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+          family: 4, // Memaksa menggunakan IPv4 untuk menghindari masalah jaringan
+    });
+
     console.log(`MongoDB Terkoneksi: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`Error Koneksi MongoDB: ${error.message}`);
   }
 };
 
