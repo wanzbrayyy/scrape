@@ -21,6 +21,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.12",
     "otplib": "^12.0.1",
+    "connect-mongo": "^6.0.0",
     "qrcode": "^1.5.4",
     "slugify": "^1.6.6"
   },
