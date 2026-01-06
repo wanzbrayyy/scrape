@@ -5,68 +5,40 @@ const flash = require('connect-flash');
 const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-
-// Load Config
 dotenv.config();
-
-// Connect to Database
 connectDB();
 
 const app = express();
-
-// Middleware Body Parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Set View Engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// Static Folder (PENTING UNTUK VERCEL)
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Session Middleware
-// Catatan: MemoryStore akan muncul warning di Vercel, itu normal untuk versi gratisan.
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'secretkey123',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 hari
+  cookie: { maxAge: 24 * 60 * 60 * 1000 } 
 }));
-
-// Flash Messages
 app.use(flash());
-
-// Global Variables Middleware
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-  // Pastikan user tersedia di semua views, atau null jika tidak login
-  res.locals.user = req.session.user || null;
-  
-  // Current Path untuk active state navbar
-  res.locals.title = 'Wanzofc Shop'; 
-  res.locals.path = req.path;
+  res.locals.user = req.session.user || null; 
   next();
 });
-
-// --- ROUTES ---
-// Pastikan semua file ini memiliki 'module.exports = router;' di baris terakhir
-app.use('/', require('./routes/dashboard'));
+app.use('/', require('./routes/dashboard')); 
 app.use('/auth', require('./routes/auth'));
 app.use('/smm', require('./routes/smm'));
 app.use('/ppob', require('./routes/ppob'));
 app.use('/deposit', require('./routes/deposit'));
+app.use('/admin', require('./routes/admin'));
 app.use('/profile', require('./routes/profile'));
 app.use('/news', require('./routes/news'));
 app.use('/marketplace', require('./routes/marketplace'));
-app.use('/admin', require('./routes/admin'));
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server berjalan di port ${PORT}`);
+  console.log(`Server wanzofc shop berjalan di port ${PORT}`);
 });
-
-module.exports = app; // Penting untuk Vercel
