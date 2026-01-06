@@ -1,66 +1,62 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo'); // Tambahan Wajib
 const flash = require('connect-flash');
 const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
-// Load Config
 dotenv.config();
 
-// Connect to Database
 connectDB();
 
 const app = express();
 
-// Middleware Body Parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Set View Engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Static Folder (PENTING UNTUK VERCEL)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Session Middleware
-// Catatan: MemoryStore akan muncul warning di Vercel, itu normal untuk versi gratisan.
+// UPDATE DI SINI: Gunakan MongoStore
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'secretkey123',
+  secret: process.env.SESSION_SECRET || 'rahasia_default_aman',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 hari
+  store: MongoStore.create({ 
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions', // Nama koleksi di DB
+    ttl: 24 * 60 * 60 // Sesi valid 1 hari
+  }),
+  cookie: { 
+    maxAge: 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production' // True jika menggunakan HTTPS/Vercel
+  }
 }));
 
-// Flash Messages
 app.use(flash());
 
-// Global Variables Middleware
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-  // Pastikan user tersedia di semua views, atau null jika tidak login
   res.locals.user = req.session.user || null;
-  
-  // Current Path untuk active state navbar
+  // Perbaiki jalur active class di navbar
   res.locals.title = 'Wanzofc Shop'; 
-  res.locals.path = req.path;
   next();
 });
 
-// --- ROUTES ---
-// Pastikan semua file ini memiliki 'module.exports = router;' di baris terakhir
 app.use('/', require('./routes/dashboard'));
 app.use('/auth', require('./routes/auth'));
 app.use('/smm', require('./routes/smm'));
 app.use('/ppob', require('./routes/ppob'));
 app.use('/deposit', require('./routes/deposit'));
 app.use('/profile', require('./routes/profile'));
-app.use('/news', require('./routes/news'));
 app.use('/marketplace', require('./routes/marketplace'));
+app.use('/news', require('./routes/news'));
 app.use('/admin', require('./routes/admin'));
 
 const PORT = process.env.PORT || 3000;
@@ -68,5 +64,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server berjalan di port ${PORT}`);
 });
-
-module.exports = app; // Penting untuk Vercel
