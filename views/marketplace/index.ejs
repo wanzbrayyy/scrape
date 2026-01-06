@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-wrapper">
+    <%- include('../partials/navbar') %>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div style="display:flex; align-items:center;">
+                <button id="sidebarCollapse" class="hamburger"><i class="fa-solid fa-bars"></i></button>
+                <div class="breadcrumb">
+                    <h2>Marketplace</h2>
+                    <span>Jual beli produk digital terpercaya</span>
+                </div>
+            </div>
+            <div class="balance-card">
+                $ <%= user.balance.toLocaleString('id-ID') %>
+            </div>
+        </header>
+
+        <% if(user.role === 'seller' || user.role === 'admin') { %>
+            <div style="margin-bottom: 20px;">
+                <a href="/marketplace/add" class="btn-primary" style="width:auto; display:inline-block;">
+                    <i class="fa-solid fa-plus"></i> Tambah Produk Baru
+                </a>
+            </div>
+        <% } %>
+
+        <div class="mp-grid">
+            <% if(products.length > 0) { %>
+                <% products.forEach(prod => { %>
+                    <div class="mp-card">
+                        <img src="<%= prod.image %>" class="mp-img">
+                        <div class="mp-details">
+                            <div class="mp-title" title="<%= prod.name %>"><%= prod.name %></div>
+                            <span class="mp-price">Rp <%= prod.price.toLocaleString('id-ID') %></span>
+                            <div class="mp-seller">
+                                <i class="fa-solid fa-store"></i> <%= prod.seller.username %> 
+                                <span style="margin-left:auto; color:var(--text-secondary)"><%= prod.sold %> terjual</span>
+                            </div>
+                            <form action="/marketplace/buy/<%= prod._id %>" method="POST" onsubmit="return confirm('Beli produk ini seharga Rp <%= prod.price %>?')">
+                                <button type="submit" class="btn-primary" style="background:transparent; border:1px solid var(--border-color); color:var(--accent); padding:5px;">
+                                    Beli Sekarang
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div style="grid-column: 1/-1; text-align:center; padding:50px; color:var(--text-secondary);">
+                    <i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:10px;"></i>
+                    <p>Belum ada produk di marketplace.</p>
+                </div>
+            <% } %>
+        </div>
+    </main>
+</div>
+
+<%- include('../partials/footer') %>

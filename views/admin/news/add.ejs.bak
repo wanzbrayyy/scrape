@@ -1,0 +1,65 @@
+<%- include('../../partials/header') %>
+
+<div class="dashboard-wrapper">
+    <%- include('../../partials/navbar') %>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button id="sidebarCollapse" class="hamburger"><i class="fa-solid fa-bars-staggered"></i></button>
+                <div class="breadcrumb">
+                    <h2>Tambah Berita</h2>
+                    <span>Buat informasi baru untuk member</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-card">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-pen-to-square text-primary"></i> Form Berita</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/news/add" method="POST">
+                    <div class="form-group">
+                        <label>Judul Berita</label>
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-heading"></i>
+                            <input type="text" name="title" class="form-control" required placeholder="Contoh: Maintenance Server SMM">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Kategori</label>
+                            <select name="category" class="form-control" required>
+                                <option value="info">Informasi Umum</option>
+                                <option value="service">Update Layanan</option>
+                                <option value="maintenance">Maintenance/Gangguan</option>
+                                <option value="promo">Promo & Bonus</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Target Audience</label>
+                            <select name="type" class="form-control" required>
+                                <option value="all">Semua User</option>
+                                <option value="member">Hanya Member</option>
+                                <option value="seller">Hanya Seller</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Konten Berita</label>
+                        <textarea name="content" class="form-control" rows="6" style="background: rgba(0,0,0,0.3); color:white; border: 1px solid rgba(255,255,255,0.1);" required placeholder="Tulis isi informasi di sini..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Publish Berita
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<%- include('../../partials/footer') %>

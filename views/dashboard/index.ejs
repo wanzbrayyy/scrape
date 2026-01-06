@@ -1,0 +1,86 @@
+<%- include('../partials/header') %>
+
+<div class="dashboard-wrapper">
+    <%- include('../partials/navbar') %>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button type="button" id="sidebarCollapse" class="hamburger">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+                <div class="breadcrumb">
+                    <h2>Dashboard</h2>
+                    <span>Halo, <%= user.fullname %> (<%= user.role.toUpperCase() %>)</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="balance-pill">
+                    <i class="fa-solid fa-wallet"></i> Rp <%= (user.balance || 0).toLocaleString('id-ID') %>
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card blue">
+                <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
+                <div class="stat-info">
+                    <h4>Sisa Saldo</h4>
+                    <h2>Rp <%= user.balance.toLocaleString('id-ID') %></h2>
+                </div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                <div class="stat-info">
+                    <h4>Total Order SMM</h4>
+                    <h2><%= stats.smmCount %></h2>
+                </div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-icon"><i class="fa-solid fa-receipt"></i></div>
+                <div class="stat-info">
+                    <h4>Total Order PPOB</h4>
+                    <h2><%= stats.ppobCount %></h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- WIDGET BERITA -->
+        <div class="content-card" style="margin-top: 30px;">
+            <div class="card-header" style="justify-content: space-between;">
+                <h3><i class="fa-solid fa-bullhorn text-warning"></i> Informasi Terbaru</h3>
+                <a href="/information" style="font-size: 12px; color: var(--neon-blue);">Lihat Semua</a>
+            </div>
+            <div class="card-body p-0">
+                <% if(typeof newsList !== 'undefined' && newsList.length > 0) { %>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <% newsList.forEach(news => { %>
+                            <div style="padding: 15px; border-bottom: 1px solid var(--glass-border);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <% 
+                                        let badgeColor = 'bg-secondary';
+                                        if(news.category == 'info') badgeColor = 'bg-info';
+                                        if(news.category == 'maintenance') badgeColor = 'bg-danger';
+                                        if(news.category == 'promo') badgeColor = 'bg-warning';
+                                        if(news.category == 'service') badgeColor = 'bg-success';
+                                    %>
+                                    <span class="badge <%= badgeColor %>"><%= news.category.toUpperCase() %></span>
+                                    <span style="font-size: 11px; color: #94a3b8;"><%= new Date(news.createdAt).toLocaleDateString('id-ID') %></span>
+                                </div>
+                                <h4 style="font-size: 15px; color: white; margin-bottom: 5px;"><%= news.title %></h4>
+                                <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5;"><%= news.content %></p>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div style="padding: 20px; text-align: center; color: #94a3b8;">
+                        Tidak ada informasi terbaru.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        
+    </main>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,31 +1,30 @@
 {
-  "name": "wanz-rest-api",
-  "version": "1.1.0",
-  "description": "REST API multifungsi dengan Express, menyediakan berbagai layanan dari web scraping hingga interaksi AI.",
-  "main": "index.js",
+  "name": "wanzofc-shop",
+  "version": "1.0.0",
+  "description": "SMM and PPOB System",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "keywords": [
-    "api",
-    "express",
-    "cors",
-    "chalk",
-    "wanzofc",
-    "scraper",
-    "downloader"
-  ],
-  "author": "wanzofc",
-  "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.2",
-    "chalk": "^4.1.2",
-    "cheerio": "^1.0.0-rc.12",
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "form-data": "^4.0.0",
-    "multer": "^1.4.5-lts.1",
-    "node-fetch": "^2.7.0",
-    "qs": "^6.12.1"
+    "axios": "^1.13.2",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "form-data": "^4.0.5",
+    "midtrans-client": "^1.4.3",
+    "mongoose": "^7.6.3",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.12",
+    "otplib": "^12.0.1",
+    "qrcode": "^1.5.4",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
