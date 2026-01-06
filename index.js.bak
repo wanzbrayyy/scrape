@@ -15,8 +15,11 @@ const qs = require('qs');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// PERBAIKAN
-const upload = multer({ dest: '/tmp' });
+const uploadDir = 'uploads';
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+const upload = multer({ dest: uploadDir + '/' });
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
